@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ThingSpeak Data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>ThingSpeak Data</h1>
+    <div id="value"></div>
+    <script>
+        var api_key = "A8HJ3LD46DNDECHV";
+        var channel_id = "2033507";
+        var field_name = "field1";
+        var url = "https://api.thingspeak.com/channels/" + channel_id + "/fields/" + field_name + "/last.json?api_key=" + api_key;
+        $.getJSON(url, function (data) {
+            console.log(data); // Output the entire API response to the console
+            if (data && data[field_name] !== undefined) {
+                var value = data[field_name];
+                console.log("Latest temperature value: " + value);
+                $("#value").text("Latest temperature value: " + value);
+            } else {
+                console.log("Error: API response is not in the expected format.");
+            }
+        }).fail(function () {
+            console.log("Error: API call failed.");
+        });
+
+    </script>
+</body>
+</html>
