@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ThingSpeak Data Retrieval</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 6px;
+            font-size: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            var channel1ID = '2079917';
+            var channel1APIKey = 'DN1EZU5IOIWE15AB';
+
+            var table = $('#dataTable');
+
+            // Temp Sensor
+            $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=5&api_key=' + channel1APIKey, function (data) {
+                $.each(data.feeds, function (index, value) {
+                    var row = $('<tr>');
+                    row.append($('<td>').text(value.created_at));
+                    row.append($('<td>').text(value.field1));
+                    table.append(row);
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <h1>Light values:</h1>
+    <table id="dataTable">
+        <tr>
+            <th>Timestamp</th>
+            <th>Value</th>
+        </tr>
+    </table>
+</body>
+</html>
