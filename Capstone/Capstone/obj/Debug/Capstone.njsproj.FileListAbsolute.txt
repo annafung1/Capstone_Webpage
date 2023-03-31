@@ -1,3 +1,6 @@
 C:\Users\R\source\repos\Capstone\Capstone\obj\Debug\Capstone.njsproj.AssemblyReference.cache
 C:\Users\R\source\repos\Capstone\Capstone\obj\Debug\Capstone.njsproj.CoreCompileInputs.cache
 C:\Users\R\source\repos\Capstone\Capstone\bin\Microsoft.NodejsTools.WebRole.dll
+C:\Users\jason\Capstone_Git\Capstone_Webpage\Capstone\Capstone\obj\Debug\Capstone.njsproj.AssemblyReference.cache
+C:\Users\jason\Capstone_Git\Capstone_Webpage\Capstone\Capstone\obj\Debug\Capstone.njsproj.CoreCompileInputs.cache
+C:\Users\jason\Capstone_Git\Capstone_Webpage\Capstone\Capstone\bin\Microsoft.NodejsTools.WebRole.dll
