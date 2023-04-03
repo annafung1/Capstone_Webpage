@@ -24,15 +24,68 @@
         th {
             background-color: #f2f2f2;
         }
+        table td:not(:last-child),
+        table th:not(:last-child) {
+            border-right: 1px solid #ddd;
+        }
+
+        #dataTable {
+            border-collapse: collapse;
+            width: 10%;
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        #latest {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            padding: 10px;
+            width: 10%;
+            text-align: center;
+            color: #000;
+            margin: 0 auto;
+            border: 2px solid darkgrey;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+
+        #graph {
+            width: 33%;
+            margin: 0 auto;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #backButton {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
     </style>
     <script>
         $(document).ready(function () {
-            var channel1ID = '2079916';
-            var channel1APIKey = 'ZQD4JSZSOVISZ0CT';
+            var channel1ID = '2079917';
+            var channel1APIKey = '3SNCFZI71IVK8XQ7';
 
             var table = $('#dataTable');
+            var latestValue = $('#latest');
+            var graph = $('#graph');
 
-            // Motion Sensor Data
+            // Montion Sensor
+            $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=1&api_key=' + channel1APIKey, function (data) {
+                latestValue.text('Latest value: ' + data.feeds[0].field1);
+            });
+
+            // Table Data
             $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=5&api_key=' + channel1APIKey, function (data) {
                 $.each(data.feeds, function (index, value) {
                     var row = $('<tr>');
@@ -42,17 +95,23 @@
                 });
             });
 
+
+            // Graph
+            var url = 'https://thingspeak.com/channels/2079917/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Motion&type=line&xaxis=Time&yaxis=Motion';
+            graph.html('<iframe src="' + url + '" width="100%" height="300"></iframe>');
         });
     </script>
 </head>
 <body style="background-color:#eeeeff">
     <h1>Motion values:</h1>
+    <div id="latest">Latest value:</div>
     <table id="dataTable">
         <tr>
             <th>Timestamp</th>
             <th>Value</th>
         </tr>
     </table>
+    <div id="graph"></div>
     <button onclick="window.location.href='/'"> Back to homepage</button>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ThingSpeak Data Retrieval</title>
+    <title>Light</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
 
@@ -24,15 +24,51 @@
         th {
             background-color: #f2f2f2;
         }
+        table td:not(:last-child),
+        table th:not(:last-child) {
+            border-right: 1px solid #ddd;
+        }
+
+        #dataTable {
+            border-collapse: collapse;
+            width: 10%;
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        #graph {
+            width: 33%;
+            margin: 0 auto;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #backButton {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        h1 {
+            text-align: center;
+        }
     </style>
     <script>
         $(document).ready(function () {
-            var channel1ID = '2079917';
-            var channel1APIKey = 'DN1EZU5IOIWE15AB';
+            var channel1ID = '2090513';
+            var channel1APIKey = 'JPURQYSUF1EU766N';
 
             var table = $('#dataTable');
+            var graph = $('#graph');
 
-            // Temp Sensor
+            // Light Sensor
+            $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=1&api_key=' + channel1APIKey, function (data) {
+                latestValue.text('Latest value: ' + data.feeds[0].field1);
+            });
+
+            // Light Sensor
             $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=5&api_key=' + channel1APIKey, function (data) {
                 $.each(data.feeds, function (index, value) {
                     var row = $('<tr>');
@@ -42,6 +78,9 @@
                 });
             });
 
+            // Graph
+            var url = 'https://thingspeak.com/channels/2090513/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Light&type=line&xaxis=Time&yaxis=Light';
+            graph.html('<iframe src="' + url + '" width="100%" height="300"></iframe>');
         });
     </script>
 </head>
@@ -53,6 +92,7 @@
             <th>Value</th>
         </tr>
     </table>
+    <div id="graph"></div>
     <button onclick="window.location.href='/'"> Back to homepage</button>
     </bodystyle="background-color:#eeeeff">
 </html>
