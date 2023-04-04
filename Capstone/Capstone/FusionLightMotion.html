@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Someone is home</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #status {
+            padding: 5px;
+            font-size: 20px;
+            background-color: #000;
+            width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Home Detection</h1>
+    <p id="latest"></p>
+    <div id="status"></div>
+    <script>
+        $(document).ready(function () {
+            const lightChannelID = '2090513';
+            const lightApiKey = 'JPURQYSUF1EU766N';
+            const motionChannelID = '2079917';
+            const motionApiKey = '3SNCFZI71IVK8XQ7';
+
+            const latestValue = $('#latest');
+            const status = $('#status');
+
+            // Grablatest light value
+            $.getJSON(`https://api.thingspeak.com/channels/${lightChannelID}/fields/1/last.json?api_key=${lightApiKey}`, function (lightData) {
+                const light = parseFloat(lightData.field1);
+                
+
+                // Grab latest motion value
+                $.getJSON(`https://api.thingspeak.com/channels/${motionChannelID}/fields/1/last.json?api_key=${motionApiKey}`, function (motionData) {
+                    const motion = parseInt(motionData.field1);
+                    
+
+                    // motion is >= 0 and light is on 
+                    if (motion >= 00 && light === 1) {
+                        status.text('Someone in the house');
+                        status.css('background-color', 'red');
+
+                        // Send email using Elastic Email API
+                        const fromEmail = 'monika.tsung@torontomu.ca';
+                        const toEmail = 'monika.tsung@torontomu.ca';
+                        const apiKey = '232E7F13F32C1D9E4ED52C5F35B9CAF548B0A3CDD0E01696098DDDC1A844E21FE3754D360FBDDC37182188D05D868874';
+                        const subject = 'Intruder Alert!';
+                        const bodyText = 'Please check cameras';
+                        const options = {
+                            "from": fromEmail,
+                            "to": toEmail,
+                            "subject": subject,
+                            "body_text": bodyText
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://api.elasticemail.com/v2/email/send",
+                            data: {
+                                "apikey": apiKey,
+                                "subject": options.subject,
+                                "from": options.from,
+                                "to": options.to,
+                                "bodyHtml": options.body_text
+                            },
+                            success: function (response) {
+                                console.log(response);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+
+                    } else {
+                        status.text('House secure');
+                        status.css('background-color', 'green');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
