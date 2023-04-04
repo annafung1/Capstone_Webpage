@@ -53,6 +53,11 @@ http.createServer(function (req, res) {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(fileContents);
         }
+        else if (url === '/fire') {
+            var fileContents = fs.readFileSync('./gas_temp_fusion.html', { encoding: 'utf8' });
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(fileContents);
+        }
         else {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('404 Not Found');
