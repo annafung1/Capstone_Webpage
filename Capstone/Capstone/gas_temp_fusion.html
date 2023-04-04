@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fire Detection</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #status {
+            padding: 5px;
+            font-size: 20px;
+            background-color: #000;
+            width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fire Detection System</h1>
+    <p id="latest"></p>
+    <div id="status"></div>
+    <script>
+        $(document).ready(function () {
+            const temperatureChannelID = '2033507';
+            const temperatureApiKey = 'A8HJ3LD46DNDECHV';
+            const gasChannelID = '2079892';
+            const gasApiKey = '514IDD3H8M16WHVO';
+
+            const latestValue = $('#latest');
+            const status = $('#status');
+
+            // Grablatest temperature value
+            $.getJSON(`https://api.thingspeak.com/channels/${temperatureChannelID}/fields/1/last.json?api_key=${temperatureApiKey}`, function (temperatureData) {
+                const temperature = parseFloat(temperatureData.field1);
+
+
+                // Grab latest gas value
+                $.getJSON(`https://api.thingspeak.com/channels/${gasChannelID}/fields/1/last.json?api_key=${gasApiKey}`, function (gasData) {
+                    const gas = parseInt(gasData.field1);
+
+                    // Check if fire is detected
+                    //change to detect fire-->  if (temperature >= 90 && gas === 1)
+                    //change to detect fire-->  if (temperature >= 90 && gas === 1) 
+                    if (temperature >= 00 && gas === 1) {
+                        status.text('Fire detected');
+                        status.css('background-color', 'red');
+
+                        // Send email using Elastic Email API
+                        const fromEmail = 'anna.fung@torontomu.ca';
+                        const toEmail = 'anna.fung@torontomu.ca';
+                        const apiKey = '98F9BFBF1503659634BD36F6FDD82C8DD5D602748C034635EA1F51598F8F1AD762653A4FC264335682B7A9B774EB9B84';
+                        const subject = 'Fire Detected!';
+                        const bodyText = 'Fire has been detected! Take action immediately.';
+                        const options = {
+                            "from": fromEmail,
+                            "to": toEmail,
+                            "subject": subject,
+                            "body_text": bodyText
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://api.elasticemail.com/v2/email/send",
+                            data: {
+                                "apikey": apiKey,
+                                "subject": options.subject,
+                                "from": options.from,
+                                "to": options.to,
+                                "bodyHtml": options.body_text
+                            },
+                            success: function (response) {
+                                console.log(response);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+
+                    } else {
+                        status.text('No fire detected');
+                        status.css('background-color', 'green');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
