@@ -22,10 +22,18 @@ http.createServer(function (req, res) {
     // Handle other requests
     else {
         if (url === '/') {
+            var fileContents = fs.readFileSync('./login.html', { encoding: 'utf8' });
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(fileContents);
+        }
+        
+           else if (url === '/home') {
             var fileContents = fs.readFileSync('./home.html', { encoding: 'utf8' });
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(fileContents);
         }
+        
+        
         else if (url === '/gas') {
             var fileContents = fs.readFileSync('./Gas.html', { encoding: 'utf8' });
             res.writeHead(200, { 'Content-Type': 'text/html' });
