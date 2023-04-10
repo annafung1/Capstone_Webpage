@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .container h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: left;
+      }
+  
+      .form-control {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+
+      .form-control label {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      .form-control input {
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        padding: 10px;
+        background-color: #f2f2f2;
+        color: #333;
+      }
+
+      .form-control input:focus {
+        outline: none;
+        box-shadow: 0 0 5px #ccc;
+      }
+
+      .submit-button {
+        background-color: #333;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 10px 20px;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      .submit-button:hover {
+        background-color: #555;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 1.2rem;
+        margin-top: 10px;
+        text-align: center;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login:</h1>
+        <form id="login-form">
+            <div class="form-control">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-control">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="submit-button">Login</button>
+            <div id="error-message" class="error-message"></div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+            const username = form.elements.username.value;
+            const password = form.elements.password.value;
+
+            if (username === 'capstone' && password === 'capstone') {
+                // Redirect to main page if login is successful
+                window.location.href = '/home';
+            } else {
+                // Show an error message if login is unsuccessful
+                errorMessage.textContent = 'Invalid username or password.';
+            }
+        });
+    </script>
+</body>
+</html>
