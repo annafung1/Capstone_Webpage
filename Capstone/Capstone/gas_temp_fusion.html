@@ -10,7 +10,33 @@
             background-color: #000;
             width: 600px;
         }
+
+        nav {
+            background-color: navy;
+            display: flex;
+            align-items: center;
+            height: 40px;
+            text-align: center;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                padding: 0 20px;
+                font-size: 1.2rem;
+                text-align: center;
+            }
+
+                nav a:hover {
+                    text-decoration: underline;
+                }
+
+
     </style>
+
+
+
+
 </head>
 <body>
     <h1>Fire Detection System</h1>
@@ -37,15 +63,14 @@
 
                     // Check if fire is detected
                     //change to detect fire-->  if (temperature >= 90 && gas === 1)
-                    //change to detect fire-->  if (temperature >= 90 && gas === 1) 
-                    if (temperature >= 00 && gas === 1) {
+                    if (temperature >= 00 && gas === 0) {
                         status.text('Fire detected');
                         status.css('background-color', 'red');
 
                         // Send email using Elastic Email API
-                        const fromEmail = 'anna.fung@torontomu.ca';
-                        const toEmail = 'anna.fung@torontomu.ca';
-                        const apiKey = '98F9BFBF1503659634BD36F6FDD82C8DD5D602748C034635EA1F51598F8F1AD762653A4FC264335682B7A9B774EB9B84';
+                        const fromEmail = 'annafung2017@gmail.com';
+                        const toEmail = 'annafung@proton.me';
+                        const apiKey = 'C5BA79060B776373D2176128EAADF5DA22EAFFFCF0F2FD60F0886367A54E2053F075FE17A2E9C185439E4EC8FA86E463';
                         const subject = 'Fire Detected!';
                         const bodyText = 'Fire has been detected! Take action immediately.';
                         const options = {
