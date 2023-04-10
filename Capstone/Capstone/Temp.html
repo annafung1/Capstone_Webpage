@@ -3,6 +3,30 @@
     <title>Temp</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+
+
+        nav {
+            background-color: navy;
+            display: flex;
+            align-items: center;
+            height: 40px;
+            text-align: center;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                padding: 0 20px;
+                font-size: 1.2rem;
+                text-align: center;
+            }
+
+                nav a:hover {
+                    text-decoration: underline;
+                }
+
+
+
         table {
             border-collapse: collapse;
             width: 20%;
@@ -54,22 +78,22 @@
 
 
         #graph {
-            width: 24%;
+            width: 21%;
             margin: 0 auto;
             text-align: center;
             margin-bottom: 20px;
-        }
-
-        #backButton {
-            position: absolute;
-            top: 10px;
-            left: 10px;
         }
 
         h1 {
             text-align: center;
         }
     </style>
+
+    <nav>
+        <a href="/home"> Home</a>
+    </nav>
+
+
     <script>
         $(document).ready(function () {
             var channel1ID = '2033507';
@@ -110,6 +134,6 @@
         </tr>
     </table>
     <div id="graph"></div>
-    <button id="backButton" onclick="window.location.href='/'"> Back to homepage</button>
+ 
 </body>
 </html>
