@@ -76,7 +76,7 @@
 
 
         #graph {
-            width: 22%;
+            width: 33%;
             margin: 0 auto;
             text-align: center;
             margin-bottom: 15px;
@@ -101,10 +101,31 @@
             var latestValue = $('#latest');
             var graph = $('#graph');
 
-            // Montion Sensor
-            $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=1&api_key=' + channel1APIKey, function (data) {
-                latestValue.text('Latest value: ' + data.feeds[0].field1);
-            });
+            function updateLatestValue() {
+                $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=1&api_key=' + channel1APIKey, function (data) {
+                    latestValue.text('Latest value: ' + data.feeds[0].field1);
+                    if (data.feeds[0].field1 == 1) {
+                        latestValue.text('Motion detected');
+                    } else {
+                        latestValue.text('No motion detected');
+                    }
+                });
+            }
+
+            function updateGraph() {
+                var url = 'https://thingspeak.com/channels/2079917/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Motion&type=line&xaxis=Time&yaxis=Motion';
+                var iframe = $('<iframe>');
+                iframe.attr('src', url);
+                iframe.attr('width', '100%');
+                iframe.attr('height', '300');
+                graph.empty();
+                graph.append(iframe);
+            }
+
+            updateLatestValue();
+            updateGraph();
+            setInterval(updateLatestValue, 5000); // update every 5 seconds
+            setInterval(updateGraph, 60000); // update every 1 minute
 
             // Table Data
             $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=5&api_key=' + channel1APIKey, function (data) {
@@ -115,12 +136,8 @@
                     table.append(row);
                 });
             });
-
-
-            // Graph
-            var url = 'https://thingspeak.com/channels/2079917/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Motion&type=line&xaxis=Time&yaxis=Motion';
-            graph.html('<iframe src="' + url + '" width="100%" height="300"></iframe>');
         });
+
     </script>
 </head>
 <body style="background-color:#eeeeff">

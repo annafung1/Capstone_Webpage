@@ -37,7 +37,8 @@
                     
 
                     // motion is >= 0 and light is on 
-                    if (motion >= 00 && light === 1) {
+                    //if (motion > 00 && light === 1) {
+                     if (motion > 00 && light >= 0) {
                         status.text('Someone in the house');
                         status.css('background-color', 'red');
 
@@ -46,7 +47,7 @@
                         const toEmail = 'monika.tsung@torontomu.ca';
                         const apiKey = '232E7F13F32C1D9E4ED52C5F35B9CAF548B0A3CDD0E01696098DDDC1A844E21FE3754D360FBDDC37182188D05D868874';
                         const subject = 'Intruder Alert!';
-                        const bodyText = 'Please check cameras';
+                        const bodyText = 'Unauthorized Entry';
                         const options = {
                             "from": fromEmail,
                             "to": toEmail,

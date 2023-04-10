@@ -75,7 +75,7 @@
 
 
         #graph {
-            width: 21%;
+            width: 33%;
             margin: 0 auto;
             text-align: center;
             margin-bottom: 20px;
@@ -102,17 +102,58 @@
             var latestValue = $('#latest');
             var graph = $('#graph');
 
-            // Water Sensor
-            $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=1&api_key=' + channel1APIKey, function (data) {
-                latestValue.text('Latest value: ' + data.feeds[0].field1);
-            });
+            var lastEmailSentTime = null; // Store the timestamp of the last email sent
+
+            // Function to get the latest water sensor value and update the webpage
+            function updateWaterValue() {
+                $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=1&api_key=' + channel1APIKey, function (data) {
+                    var waterValue = data.feeds[0].field1;
+                    latestValue.text('Latest value: ' + (waterValue == 0 ? 'Leak detected' : 'No leak'));
+
+                    // Send email notification if leak is detected and at least 1 hour has passed since the last email
+                    if (waterValue == 1 && (!lastEmailSentTime || (Date.now() - lastEmailSentTime) > 3600000)) {
+                        const fromEmail = 'annafung2017@gmail.com';
+                        const toEmail = 'annafung@proton.me';
+                        const apiKey = 'C5BA79060B776373D2176128EAADF5DA22EAFFFCF0F2FD60F0886367A54E2053F075FE17A2E9C185439E4EC8FA86E463';
+                        const subject = 'Leak Detected!';
+                        const bodyText = 'Water has been detected! Take action immediately.';
+                        const options = {
+                            "from": fromEmail,
+                            "to": toEmail,
+                            "subject": subject,
+                            "body_text": bodyText
+                        };
+                        $.ajax({
+                            type: "POST",
+                            url: "https://api.elasticemail.com/v2/email/send",
+                            data: {
+                                "apikey": apiKey,
+                                "subject": options.subject,
+                                "from": options.from,
+                                "to": options.to,
+                                "bodyHtml": options.body_text
+                            },
+                            success: function (response) {
+                                console.log(response);
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                        lastEmailSentTime = Date.now(); // Update the timestamp of the last email sent
+                    }
+                });
+            }
+
+            // Call the updateWaterValue function every 5 seconds
+            setInterval(updateWaterValue, 5000);
 
             // Water Sensor
             $.getJSON('https://api.thingspeak.com/channels/' + channel1ID + '/fields/1.json?results=5&api_key=' + channel1APIKey, function (data) {
                 $.each(data.feeds, function (index, value) {
                     var row = $('<tr>');
                     row.append($('<td>').text(value.created_at));
-                    row.append($('<td>').text(value.field1));
+                    row.append($('<td>').text(value.field1 == 0 ? 'Leak detected' : 'No leak'));
                     table.append(row);
                 });
             });
@@ -121,6 +162,9 @@
             var url = 'https://thingspeak.com/channels/2090498/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&title=Water&type=line&xaxis=Time&yaxis=Water';
             graph.html('<iframe src="' + url + '" width="100%" height="300"></iframe>');
         });
+
+
+
     </script>
 </head>
 <body style="background-color:#eeeeff">
